@@ -4,6 +4,7 @@ import './globals.css';
 import { LanguageProvider } from '@/context/LanguageContext';
 import Navbar from '@/components/Navbar';
 import MobileNav from '@/components/MobileNav';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -69,6 +70,7 @@ export default function RootLayout({
             `,
           }}
         />
+        <SpeedInsights />
       </body>
     </html>
   );
