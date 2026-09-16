@@ -3,68 +3,79 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useLanguage } from '@/context/LanguageContext';
+import { useLanguage, Language } from '@/context/LanguageContext';
 import { Layers, BookOpen, OctagonAlert, ShieldCheck, Flame } from 'lucide-react';
 
 export default function MobileNav() {
   const pathname = usePathname();
   const { language } = useLanguage();
 
-  const navItems = [
+  const navItems: {
+    key: string;
+    href: string;
+    icon: React.ElementType;
+    label: Record<Language, string>;
+  }[] = [
     {
+      key: 'home',
       href: '/',
-      label: { es: 'Inicio', en: 'Home', ca: 'Inici' },
       icon: Layers,
+      label: { es: 'Inicio', en: 'Home', ca: 'Inici' },
     },
     {
+      key: 'learn',
       href: '/learn',
-      label: { es: 'Aprender', en: 'Learn', ca: 'Aprendre' },
       icon: BookOpen,
-      matchPrefix: true,
+      label: { es: 'Temario', en: 'Learn', ca: 'Temari' },
     },
     {
+      key: 'signs',
       href: '/signs',
-      label: { es: 'Señales', en: 'Signs', ca: 'Senyals' },
       icon: OctagonAlert,
-      matchPrefix: true,
+      label: { es: 'Señales', en: 'Signs', ca: 'Senyals' },
     },
     {
+      key: 'exam',
       href: '/exam',
-      label: { es: 'Examen', en: 'Exam', ca: 'Examen' },
       icon: ShieldCheck,
+      label: { es: 'Examen', en: 'Exam', ca: 'Examen' },
     },
     {
+      key: 'mistakes',
       href: '/mistakes',
-      label: { es: 'Fallos', en: 'Mistakes', ca: 'Errors' },
       icon: Flame,
+      label: { es: 'Fallos', en: 'Mistakes', ca: 'Errors' },
     },
   ];
 
   return (
-    <footer className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-slate-950/85 backdrop-blur-xl px-4 py-2 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-2xl">
-      <div className="flex items-center justify-around text-xs">
+    <div className="fixed bottom-0 left-0 right-0 z-40 block border-t border-slate-200/80 bg-white/85 backdrop-blur-xl transition-colors duration-200 md:hidden dark:border-white/10 dark:bg-slate-950/85">
+      <nav className="flex h-16 items-center justify-around px-2 safe-area-pb">
         {navItems.map((item) => {
           const Icon = item.icon;
-          const isActive = item.matchPrefix
-            ? pathname === item.href || pathname.startsWith(`${item.href}/`)
-            : pathname === item.href;
+          const isActive =
+            item.href === '/'
+              ? pathname === '/'
+              : pathname.startsWith(item.href);
 
           return (
             <Link
-              key={item.href}
+              key={item.key}
               href={item.href}
-              className={`flex flex-col items-center gap-1 transition-all ${
+              className={`flex flex-col items-center justify-center gap-1 px-3 py-1 transition-colors cursor-pointer ${
                 isActive
-                  ? 'text-amber-400 font-semibold scale-105'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'text-amber-500 font-bold dark:text-amber-400'
+                  : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
               }`}
             >
-              <Icon className={`h-5 w-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.75]'}`} />
-              <span className="text-[11px]">{item.label[language]}</span>
+              <Icon className={`h-5 w-5 ${isActive ? 'stroke-[2.5]' : 'stroke-2'}`} />
+              <span className="text-[10px] tracking-tight">
+                {item.label[language]}
+              </span>
             </Link>
           );
         })}
-      </div>
-    </footer>
+      </nav>
+    </div>
   );
 }
