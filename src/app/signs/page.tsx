@@ -7,13 +7,8 @@ import TrafficSign from '@/components/TrafficSign';
 import { 
   Search, 
   X, 
-  AlertTriangle, 
-  ShieldAlert, 
-  Ban, 
-  Compass, 
-  Info, 
   ArrowLeft,
-  Filter,
+  Info,
   Sparkles
 } from 'lucide-react';
 
@@ -418,12 +413,12 @@ export default function SignsCatalogPage() {
   }, [activeCategory, searchQuery, language]);
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-12">
+    <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-12 transition-colors duration-200">
       {/* Top Banner Header */}
       <div className="mb-6 sm:mb-8">
         <Link
           href="/"
-          className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-400 hover:text-white transition-colors"
+          className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors dark:text-slate-400 dark:hover:text-white"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           <span>{copy.backToHome[language]}</span>
@@ -431,14 +426,14 @@ export default function SignsCatalogPage() {
 
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/20 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-400">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-3 py-1 text-xs font-semibold text-amber-600 dark:border-amber-500/20 dark:text-amber-400">
               <Sparkles className="h-3.5 w-3.5" />
               <span>{copy.badge[language]}</span>
             </div>
-            <h1 className="mt-2 text-2xl sm:text-3xl font-black text-white tracking-tight">
+            <h1 className="mt-2 text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
               {copy.title[language]}
             </h1>
-            <p className="mt-1 text-xs sm:text-sm text-slate-400 max-w-xl">
+            <p className="mt-1 text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl">
               {copy.subtitle[language]}
             </p>
           </div>
@@ -447,18 +442,18 @@ export default function SignsCatalogPage() {
 
       {/* Search Input */}
       <div className="relative mb-4">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-slate-500" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder={copy.searchPlaceholder[language]}
-          className="w-full rounded-2xl border border-white/10 bg-slate-900/80 py-3.5 pl-11 pr-10 text-xs sm:text-sm text-white placeholder-slate-500 backdrop-blur-xl focus:border-amber-400 focus:outline-none focus:ring-1 focus:ring-amber-400 transition-all"
+          className="w-full rounded-2xl border border-slate-200 bg-white py-3.5 pl-11 pr-10 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 shadow-sm backdrop-blur-xl focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/20 transition-all dark:border-white/10 dark:bg-slate-900/80 dark:text-white dark:placeholder:text-slate-500"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
-            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-white transition-colors"
+            className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-700 transition-colors dark:hover:text-white"
           >
             <X className="h-4 w-4" />
           </button>
@@ -475,10 +470,10 @@ export default function SignsCatalogPage() {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-all border ${
+              className={`shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-all border cursor-pointer ${
                 isActive
                   ? 'border-amber-400 bg-amber-400 text-slate-950 shadow-md shadow-amber-400/20'
-                  : 'border-white/5 bg-slate-900/60 text-slate-300 hover:border-white/20 hover:bg-slate-800'
+                  : 'border-slate-200 bg-white text-slate-600 shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 dark:border-white/5 dark:bg-slate-900/60 dark:text-slate-300 dark:hover:border-white/20 dark:hover:bg-slate-800 dark:hover:text-white'
               }`}
             >
               {copy.categories[cat][language]}
@@ -489,91 +484,91 @@ export default function SignsCatalogPage() {
 
       {/* Signs Grid */}
       {filteredSigns.length === 0 ? (
-        <div className="rounded-3xl border border-white/10 bg-slate-900/40 p-12 text-center backdrop-blur-xl">
-          <Info className="mx-auto h-8 w-8 text-slate-500 mb-2" />
-          <p className="text-sm font-semibold text-slate-400">{copy.noResults[language]}</p>
+        <div className="rounded-3xl border border-slate-200 bg-white/80 p-12 text-center shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/40">
+          <Info className="mx-auto h-8 w-8 text-slate-400 mb-2" />
+          <p className="text-sm font-semibold text-slate-600 dark:text-slate-400">{copy.noResults[language]}</p>
         </div>
       ) : (
-       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-  {filteredSigns.map((sign) => {
-    const name = sign.name[language] || sign.name.es;
-    const meaning = sign.meaning[language] || sign.meaning.es;
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {filteredSigns.map((sign) => {
+            const name = sign.name[language] || sign.name.es;
+            const meaning = sign.meaning[language] || sign.meaning.es;
 
-    return (
-      <div
-        key={sign.id}
-        onClick={() => setInspectedSign(sign)}
-        className="group cursor-pointer rounded-2xl border border-white/10 bg-slate-900/60 p-5 backdrop-blur-xl transition-all hover:border-amber-400/40 hover:bg-slate-900/90 hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-between shadow-lg"
-      >
-        <div>
-          {/* Card Header: Code & Tip */}
-          <div className="flex items-center justify-between gap-2 mb-4">
-            <span className="font-mono text-xs font-bold text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-lg border border-amber-400/20">
-              {sign.code}
-            </span>
-            <span className="text-[10px] text-slate-500 font-medium group-hover:text-slate-400 transition-colors">
-              {copy.inspectTip[language]}
-            </span>
-          </div>
+            return (
+              <div
+                key={sign.id}
+                onClick={() => setInspectedSign(sign)}
+                className="group cursor-pointer rounded-2xl border border-slate-200/80 bg-white/80 p-5 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400/60 hover:bg-white hover:shadow-md hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-between dark:border-white/10 dark:bg-slate-900/60 dark:shadow-lg dark:hover:border-amber-400/40 dark:hover:bg-slate-900/90"
+              >
+                <div>
+                  {/* Card Header: Code & Tip */}
+                  <div className="flex items-center justify-between gap-2 mb-4">
+                    <span className="font-mono text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-400/10 px-2.5 py-1 rounded-lg border border-amber-400/30">
+                      {sign.code}
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-medium group-hover:text-slate-600 transition-colors dark:text-slate-500 dark:group-hover:text-slate-400">
+                      {copy.inspectTip[language]}
+                    </span>
+                  </div>
 
-          {/* Large Sign Preview Canvas */}
-          <div className="flex items-center justify-center rounded-2xl bg-slate-950/70 border border-white/5 p-5 mb-4 group-hover:border-amber-400/30 transition-colors shadow-inner">
-            <TrafficSign signId={sign.id} className="h-28 w-28 sm:h-32 sm:w-32 drop-shadow-xl transition-transform duration-200 group-hover:scale-105" />
-          </div>
+                  {/* Large Sign Preview Canvas */}
+                  <div className="flex items-center justify-center rounded-2xl bg-slate-50 border border-slate-200/80 p-5 mb-4 group-hover:border-amber-400/30 transition-colors dark:bg-slate-950/70 dark:border-white/5 shadow-inner">
+                    <TrafficSign signId={sign.id} className="h-28 w-28 sm:h-32 sm:w-32 drop-shadow-md dark:drop-shadow-xl transition-transform duration-200 group-hover:scale-105" />
+                  </div>
 
-          {/* Title & Description */}
-          <h3 className="text-sm font-bold text-white group-hover:text-amber-400 transition-colors leading-snug line-clamp-2">
-            {name}
-          </h3>
-          <p className="mt-1.5 text-xs text-slate-400 line-clamp-2 leading-relaxed">
-            {meaning}
-          </p>
+                  {/* Title & Description */}
+                  <h3 className="text-sm font-bold text-slate-900 group-hover:text-amber-600 transition-colors leading-snug line-clamp-2 dark:text-white dark:group-hover:text-amber-400">
+                    {name}
+                  </h3>
+                  <p className="mt-1.5 text-xs text-slate-500 line-clamp-2 leading-relaxed dark:text-slate-400">
+                    {meaning}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
-      </div>
-    );
-  })}
-</div>
       )}
 
       {/* Inspect Modal Drawer */}
       {inspectedSign && (
         <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-md animate-fadeIn dark:bg-slate-950/80"
           onClick={() => setInspectedSign(null)}
         >
           <div 
-            className="w-full max-w-md rounded-3xl border border-white/15 bg-slate-900 p-6 sm:p-7 shadow-2xl backdrop-blur-2xl"
+            className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 sm:p-7 shadow-2xl backdrop-blur-2xl dark:border-white/15 dark:bg-slate-900"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <span className="font-mono text-sm font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-xl border border-amber-400/20">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4 dark:border-white/10">
+              <span className="font-mono text-sm font-bold text-amber-600 dark:text-amber-400 bg-amber-400/10 px-3 py-1 rounded-xl border border-amber-400/30">
                 {inspectedSign.code}
               </span>
               <button
                 onClick={() => setInspectedSign(null)}
-                className="p-1 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all"
+                className="p-1 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-all dark:hover:text-white dark:hover:bg-white/5"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             <div className="flex justify-center py-6">
-              <div className="flex items-center justify-center rounded-3xl border border-white/10 bg-slate-950/80 p-6 shadow-inner">
-                <TrafficSign signId={inspectedSign.id} className="h-28 w-28 drop-shadow-xl" />
+              <div className="flex items-center justify-center rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-inner dark:border-white/10 dark:bg-slate-950/80">
+                <TrafficSign signId={inspectedSign.id} className="h-28 w-28 drop-shadow-md dark:drop-shadow-xl" />
               </div>
             </div>
 
-            <h2 className="text-base sm:text-lg font-black text-white text-center">
+            <h2 className="text-base sm:text-lg font-black text-slate-900 text-center dark:text-white">
               {inspectedSign.name[language] || inspectedSign.name.es}
             </h2>
 
-            <p className="mt-3 text-xs sm:text-sm text-slate-300 leading-relaxed text-center">
+            <p className="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed text-center dark:text-slate-300">
               {inspectedSign.meaning[language] || inspectedSign.meaning.es}
             </p>
 
             {inspectedSign.ruleNote && (
-              <div className="mt-5 rounded-2xl border border-amber-400/20 bg-amber-400/5 p-3.5 text-xs text-amber-300">
-                <strong className="block font-bold text-amber-400 mb-0.5">
+              <div className="mt-5 rounded-2xl border border-amber-500/20 bg-amber-500/10 p-3.5 text-xs text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/5 dark:text-amber-300">
+                <strong className="block font-bold text-amber-800 dark:text-amber-400 mb-0.5">
                   {copy.officialRule[language]}:
                 </strong>
                 {inspectedSign.ruleNote[language] || inspectedSign.ruleNote.es}
@@ -582,7 +577,7 @@ export default function SignsCatalogPage() {
 
             <button
               onClick={() => setInspectedSign(null)}
-              className="mt-6 w-full rounded-xl bg-amber-400 py-3 text-xs font-bold text-slate-950 hover:bg-amber-300 transition-all"
+              className="mt-6 w-full rounded-xl bg-amber-400 py-3 text-xs font-bold text-slate-950 hover:bg-amber-300 shadow-sm transition-all"
             >
               {copy.close[language]}
             </button>

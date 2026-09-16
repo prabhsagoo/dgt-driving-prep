@@ -80,16 +80,16 @@ export default function LearnPage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 transition-colors duration-200">
       <div className="mb-10 text-left">
-        <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400">
+        <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-600 backdrop-blur-md dark:border-amber-500/20 dark:text-amber-400">
           <Sparkles className="h-3.5 w-3.5" />
           <span>{copy.badge[language]}</span>
         </div>
-        <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+        <h1 className="mt-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl dark:text-white">
           {copy.title[language]}
         </h1>
-        <p className="mt-2 text-sm text-slate-400 max-w-2xl sm:text-base">
+        <p className="mt-2 text-sm text-slate-600 max-w-2xl sm:text-base dark:text-slate-400">
           {copy.desc[language]}
         </p>
       </div>
@@ -103,29 +103,29 @@ export default function LearnPage() {
             <Link
               key={topic.id}
               href={`/learn/${topic.id}`}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 p-6 backdrop-blur-md transition-all hover:border-amber-400/40 hover:bg-slate-900/80 hover:shadow-xl hover:shadow-amber-500/5"
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/80 bg-white/70 p-6 shadow-sm backdrop-blur-md transition-all hover:border-amber-400/60 hover:bg-white hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:hover:border-amber-400/40 dark:hover:bg-slate-900/80 dark:hover:shadow-xl dark:hover:shadow-amber-500/5"
             >
               <div>
                 <div className="flex items-start justify-between">
-                  <div className="rounded-xl border border-white/10 bg-slate-800/80 p-3 text-slate-300 group-hover:text-amber-400 transition-colors">
+                  <div className="rounded-xl border border-slate-200 bg-slate-100 p-3 text-slate-700 group-hover:text-amber-600 transition-colors dark:border-white/10 dark:bg-slate-800/80 dark:text-slate-300 dark:group-hover:text-amber-400">
                     <IconComponent className="h-6 w-6" />
                   </div>
-                  <span className="rounded-lg bg-slate-800/60 px-2.5 py-1 text-xs font-medium text-slate-400 border border-white/5">
+                  <span className="rounded-lg border border-slate-200 bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600 dark:border-white/5 dark:bg-slate-800/60 dark:text-slate-400">
                     {copy.questionsUnit(actualCount)[language]}
                   </span>
                 </div>
 
-                <h3 className="mt-4 text-lg font-bold text-white group-hover:text-amber-400 transition-colors">
+                <h3 className="mt-4 text-lg font-bold text-slate-900 group-hover:text-amber-600 transition-colors dark:text-white dark:group-hover:text-amber-400">
                   {topic.title[language]}
                 </h3>
-                <p className="mt-1.5 text-xs text-slate-400 leading-relaxed line-clamp-2">
+                <p className="mt-1.5 text-xs text-slate-500 leading-relaxed line-clamp-2 dark:text-slate-400">
                   {topic.description[language]}
                 </p>
               </div>
 
-              <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-4 text-xs font-medium text-slate-500">
+              <div className="mt-6 flex items-center justify-between border-t border-slate-200/60 pt-4 text-xs font-medium text-slate-400 dark:border-white/5 dark:text-slate-500">
                 <span>{copy.tagDgt[language]}</span>
-                <span className="font-semibold text-slate-300 group-hover:text-amber-400 flex items-center gap-1.5 transition-colors">
+                <span className="font-semibold text-slate-600 group-hover:text-amber-600 flex items-center gap-1.5 transition-colors dark:text-slate-300 dark:group-hover:text-amber-400">
                   {copy.startTopic[language]} <ArrowRight className="h-3.5 w-3.5" />
                 </span>
               </div>

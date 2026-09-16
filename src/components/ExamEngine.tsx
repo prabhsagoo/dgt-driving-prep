@@ -55,7 +55,6 @@ function buildExamQuestions(): Question[] {
     const pool = raw.filter((q) => q && q.question && q.options);
     if (pool.length === 0) return EMERGENCY_QUESTIONS;
 
-    // Group questions by canonical module
     const groups: Record<string, Question[]> = {};
     pool.forEach((q) => {
       const tid = q.topicId || 'general';
@@ -67,7 +66,6 @@ function buildExamQuestions(): Question[] {
     const selected: Question[] = [];
     const usedIds = new Set<string>();
 
-    // Step 1: Draw ~3-4 balanced questions per topic
     topicKeys.forEach((key) => {
       const topicPool = [...groups[key]].sort(() => 0.5 - Math.random());
       const toTake = topicPool.slice(0, 3);
@@ -77,7 +75,6 @@ function buildExamQuestions(): Question[] {
       });
     });
 
-    // Step 2: Fill the remaining slots randomly up to 30
     const remainingPool = pool
       .filter((q) => !usedIds.has(q.id))
       .sort(() => 0.5 - Math.random());
@@ -88,7 +85,6 @@ function buildExamQuestions(): Question[] {
       usedIds.add(q.id);
     }
 
-    // Step 3: Fallback if pool is under 30
     if (selected.length < 30) {
       const shuffledAll = [...pool].sort(() => 0.5 - Math.random());
       while (selected.length < 30) {
@@ -96,7 +92,6 @@ function buildExamQuestions(): Question[] {
       }
     }
 
-    // Final shuffle so questions from the same topic aren't adjacent
     return selected.sort(() => 0.5 - Math.random());
   } catch {
     return EMERGENCY_QUESTIONS;
@@ -260,18 +255,16 @@ export default function ExamEngine() {
     setIsSubmitted(true);
     const { mistakes, isPassed, failedQuestionIds } = calculateResults();
 
-    // 1. Save failed questions to Mistakes Bank
     if (failedQuestionIds.length > 0) {
       try {
         const existing: string[] = JSON.parse(localStorage.getItem('dgt_mistakes') || '[]');
         const updated = Array.from(new Set([...existing, ...failedQuestionIds]));
         localStorage.setItem('dgt_mistakes', JSON.stringify(updated));
       } catch {
-        // Fallback for private browsing storage quotas
+        // Fallback
       }
     }
 
-    // 2. Save attempt to Exam History for Home Dashboard Readiness Score
     try {
       const existingHistory = JSON.parse(localStorage.getItem('dgt_exam_history') || '[]');
       const newAttempt = {
@@ -327,20 +320,20 @@ export default function ExamEngine() {
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 transition-colors duration-200">
       {!isSubmitted ? (
         <>
           {/* Top Bar: Timer & Status */}
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-slate-900/70 p-4 backdrop-blur-xl">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-slate-900/70">
             <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400 font-black text-slate-950 text-sm">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-amber-400 font-black text-slate-950 text-sm shadow-md shadow-amber-400/20">
                 {currentIndex + 1}
               </span>
               <div>
-                <span className="text-xs font-bold text-white block">
+                <span className="text-xs font-bold text-slate-900 block dark:text-white">
                   {copy.examBadge[language]}
                 </span>
-                <span className="text-[11px] font-medium text-slate-400">
+                <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
                   {copy.answeredCount(Object.keys(userAnswers).length, questions.length)[language]}
                 </span>
               </div>
@@ -348,20 +341,20 @@ export default function ExamEngine() {
 
             <div className={`flex items-center gap-2 rounded-xl px-4 py-2 font-mono text-sm font-bold border transition-colors ${
               timeLeft < 300 
-                ? 'bg-rose-500/10 text-rose-400 border-rose-500/30 animate-pulse' 
-                : 'bg-slate-800/80 text-slate-200 border-white/10'
+                ? 'bg-rose-500/10 text-rose-600 border-rose-500/30 animate-pulse dark:text-rose-400' 
+                : 'bg-slate-100/80 text-slate-800 border-slate-200 dark:border-white/10 dark:bg-slate-800/80 dark:text-slate-200'
             }`}>
-              <Clock className="h-4 w-4 text-amber-400" />
+              <Clock className="h-4 w-4 text-amber-500 dark:text-amber-400" />
               <span>{String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}</span>
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => toggleFlag(currentIndex)}
-                className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors ${
+                className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors cursor-pointer ${
                   flaggedQuestions[currentIndex]
-                    ? 'border-amber-400/50 bg-amber-400/10 text-amber-400'
-                    : 'border-white/10 bg-slate-800/50 text-slate-400 hover:text-white'
+                    ? 'border-amber-400/60 bg-amber-400/15 text-amber-600 dark:text-amber-300'
+                    : 'border-slate-200 bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900 dark:border-white/10 dark:bg-slate-800/50 dark:text-slate-400 dark:hover:text-white'
                 }`}
               >
                 <Flag className="h-3.5 w-3.5" />
@@ -372,7 +365,7 @@ export default function ExamEngine() {
 
               <button
                 onClick={handleFinishExam}
-                className="rounded-xl bg-amber-400 px-4 py-2 text-xs font-bold text-slate-950 transition-all hover:bg-amber-300"
+                className="rounded-xl bg-amber-400 px-4 py-2 text-xs font-bold text-slate-950 shadow-md shadow-amber-400/20 transition-all hover:bg-amber-300 cursor-pointer"
               >
                 {copy.finishTest[language]}
               </button>
@@ -380,21 +373,21 @@ export default function ExamEngine() {
           </div>
 
           {/* Question Card */}
-          <div className="rounded-3xl border border-white/10 bg-slate-900/80 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
+          <div className="rounded-3xl border border-slate-200/90 bg-white/80 p-6 sm:p-8 shadow-sm backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-slate-900/80 dark:shadow-2xl">
             {currentQ.imageUrl && (
               <div className="mb-6 flex justify-center">
-                <div className="flex items-center justify-center rounded-2xl border border-white/10 bg-slate-950/60 p-4 shadow-inner">
+                <div className="flex items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 p-4 shadow-inner dark:border-white/10 dark:bg-slate-950/60">
                   <TrafficSign signId={currentQ.imageUrl} className="h-28 w-28 drop-shadow-md" />
                 </div>
               </div>
             )}
 
             <div className="flex items-start justify-between gap-4">
-              <h2 className="text-lg font-bold text-white sm:text-xl leading-relaxed">
+              <h2 className="text-lg font-bold text-slate-900 sm:text-xl leading-relaxed dark:text-white">
                 {currentQuestionText}
               </h2>
               {flaggedQuestions[currentIndex] && (
-                <span className="shrink-0 rounded-lg bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-400 flex items-center gap-1">
+                <span className="shrink-0 rounded-lg bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 text-[10px] font-bold text-amber-600 flex items-center gap-1 dark:text-amber-400">
                   <Flag className="h-3 w-3" /> {copy.flagged[language]}
                 </span>
               )}
@@ -407,16 +400,16 @@ export default function ExamEngine() {
                   <button
                     key={optIdx}
                     onClick={() => handleSelectOption(optIdx)}
-                    className={`w-full text-left p-4 rounded-2xl border transition-all flex items-start gap-3.5 ${
+                    className={`w-full text-left p-4 rounded-2xl border transition-all flex items-start gap-3.5 cursor-pointer ${
                       isSelected
-                        ? 'border-amber-400 bg-amber-400/10 text-white shadow-lg shadow-amber-500/5 ring-1 ring-amber-400'
-                        : 'border-white/5 bg-slate-800/40 text-slate-300 hover:border-white/20 hover:bg-slate-800/80'
+                        ? 'border-amber-400 bg-amber-400/10 text-slate-950 shadow-sm ring-1 ring-amber-400 dark:text-white'
+                        : 'border-slate-200 bg-slate-50/70 text-slate-700 hover:border-slate-300 hover:bg-slate-100/70 dark:border-white/5 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:border-white/20 dark:hover:bg-slate-800/80'
                     }`}
                   >
                     <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold border transition-colors ${
                       isSelected
                         ? 'border-amber-400 bg-amber-400 text-slate-950'
-                        : 'border-slate-600 bg-slate-800 text-slate-400'
+                        : 'border-slate-300 bg-slate-200 text-slate-700 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-400'
                     }`}>
                       {String.fromCharCode(65 + optIdx)}
                     </span>
@@ -427,30 +420,30 @@ export default function ExamEngine() {
             </div>
 
             {/* Navigation Controls */}
-            <div className="mt-8 flex items-center justify-between border-t border-white/5 pt-5">
+            <div className="mt-8 flex items-center justify-between border-t border-slate-100 pt-5 dark:border-white/5">
               <button
                 disabled={currentIndex === 0}
                 onClick={() => setCurrentIndex((prev) => prev - 1)}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-white/10 bg-slate-800/60 px-4 py-2.5 text-xs font-semibold text-slate-300 transition-all hover:bg-white/10 disabled:opacity-30 disabled:pointer-events-none"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-4 py-2.5 text-xs font-semibold text-slate-600 transition-all hover:bg-slate-200 hover:text-slate-900 disabled:opacity-30 disabled:pointer-events-none dark:border-white/10 dark:bg-slate-800/60 dark:text-slate-300 dark:hover:bg-white/10 dark:hover:text-white cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" /> {copy.previous[language]}
               </button>
 
-              <span className="text-xs font-bold text-slate-400">
+              <span className="text-xs font-bold text-slate-400 dark:text-slate-500">
                 {currentIndex + 1} {copy.of[language]} {questions.length}
               </span>
 
               {currentIndex < questions.length - 1 ? (
                 <button
                   onClick={() => setCurrentIndex((prev) => prev + 1)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-white/10 px-5 py-2.5 text-xs font-semibold text-white transition-all hover:bg-white/20"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-semibold text-slate-800 shadow-sm transition-all hover:bg-slate-100 hover:text-slate-950 dark:border-transparent dark:bg-white/10 dark:text-white dark:hover:bg-white/20 cursor-pointer"
                 >
                   {copy.next[language]} <ArrowRight className="h-4 w-4" />
                 </button>
               ) : (
                 <button
                   onClick={handleFinishExam}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-amber-400 px-5 py-2.5 text-xs font-bold text-slate-950 transition-all hover:bg-amber-300"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-amber-400 px-5 py-2.5 text-xs font-bold text-slate-950 shadow-md shadow-amber-400/20 transition-all hover:bg-amber-300 cursor-pointer"
                 >
                   {copy.finishTest[language]}
                 </button>
@@ -459,12 +452,12 @@ export default function ExamEngine() {
           </div>
 
           {/* Interactive 1-30 Navigator */}
-          <div className="mt-6 rounded-2xl border border-white/10 bg-slate-900/60 p-4 backdrop-blur-md">
-            <div className="mb-3 flex items-center justify-between text-xs font-semibold text-slate-400">
+          <div className="mt-6 rounded-2xl border border-slate-200/90 bg-white/80 p-4 shadow-sm backdrop-blur-md transition-colors dark:border-white/10 dark:bg-slate-900/60">
+            <div className="mb-3 flex items-center justify-between text-xs font-semibold text-slate-500 dark:text-slate-400">
               <span>{copy.jumpTo[language]}</span>
               <div className="flex items-center gap-3 text-[11px]">
                 <span className="flex items-center gap-1">
-                  <span className="h-2.5 w-2.5 rounded-full bg-slate-700" /> {copy.unanswered[language]}
+                  <span className="h-2.5 w-2.5 rounded-full bg-slate-300 dark:bg-slate-700" /> {copy.unanswered[language]}
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" /> {copy.answered[language]}
@@ -485,17 +478,19 @@ export default function ExamEngine() {
                   <button
                     key={i}
                     onClick={() => setCurrentIndex(i)}
-                    className={`relative flex h-8 w-full items-center justify-center rounded-lg text-xs font-bold transition-all ${
+                    className={`relative flex h-8 w-full items-center justify-center rounded-lg text-xs font-bold transition-all cursor-pointer ${
                       isCurrent
-                        ? 'ring-2 ring-amber-400 bg-slate-700 text-white'
+                        ? 'ring-2 ring-amber-400 ring-offset-2 ring-offset-white bg-amber-400 text-slate-950 font-black dark:ring-offset-slate-900'
+                        : isFlagged
+                        ? 'border border-amber-400/60 bg-amber-400/20 text-amber-600 dark:text-amber-300'
                         : isAnswered
-                        ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
-                        : 'bg-slate-800/80 text-slate-400 hover:bg-slate-700 border border-white/5'
+                        ? 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30 dark:bg-emerald-500/20 dark:text-emerald-300'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200 dark:border-white/5 dark:bg-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-700'
                     }`}
                   >
                     {i + 1}
                     {isFlagged && (
-                      <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-amber-400 border border-slate-950" />
+                      <span className="absolute -top-1 -right-1 h-2.5 w-2.5 rounded-full bg-amber-400 border border-white dark:border-slate-950" />
                     )}
                   </button>
                 );
@@ -506,57 +501,57 @@ export default function ExamEngine() {
       ) : (
         /* Results View */
         <div className="space-y-6">
-          <div className="rounded-3xl border border-white/10 bg-slate-900/80 p-8 text-center backdrop-blur-2xl shadow-2xl">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-white/5 border border-white/10">
+          <div className="rounded-3xl border border-slate-200/90 bg-white/80 p-8 text-center shadow-xl backdrop-blur-2xl transition-colors dark:border-white/10 dark:bg-slate-900/80 dark:shadow-2xl">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-3xl bg-slate-100 border border-slate-200 dark:bg-white/5 dark:border-white/10">
               {isPassed ? (
-                <CheckCircle2 className="h-12 w-12 text-emerald-400" />
+                <CheckCircle2 className="h-12 w-12 text-emerald-500 dark:text-emerald-400" />
               ) : (
-                <XCircle className="h-12 w-12 text-rose-400" />
+                <XCircle className="h-12 w-12 text-rose-500 dark:text-rose-400" />
               )}
             </div>
 
-            <h1 className="mt-4 text-3xl font-black text-white sm:text-4xl tracking-tight">
+            <h1 className="mt-4 text-3xl font-black text-slate-900 sm:text-4xl tracking-tight dark:text-white">
               {isPassed ? copy.passedTitle[language] : copy.failedTitle[language]}
             </h1>
 
-            <p className="mt-2.5 text-sm text-slate-400 max-w-lg mx-auto leading-relaxed">
+            <p className="mt-2.5 text-sm text-slate-600 max-w-lg mx-auto leading-relaxed dark:text-slate-400">
               {isPassed 
                 ? copy.passedDesc[language] 
                 : copy.failedDesc(mistakes)[language]}
             </p>
 
             <div className="my-8 grid grid-cols-2 gap-3 sm:grid-cols-4 max-w-2xl mx-auto">
-              <div className="rounded-2xl border border-white/5 bg-slate-800/40 p-4">
-                <div className="text-2xl font-black text-white">{questions.length}</div>
-                <div className="text-xs text-slate-400 mt-0.5">{copy.total[language]}</div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:border-white/5 dark:bg-slate-800/40">
+                <div className="text-2xl font-black text-slate-900 dark:text-white">{questions.length}</div>
+                <div className="text-xs text-slate-500 mt-0.5 dark:text-slate-400">{copy.total[language]}</div>
               </div>
-              <div className="rounded-2xl border border-white/5 bg-slate-800/40 p-4">
-                <div className="text-2xl font-black text-emerald-400">{questions.length - mistakes}</div>
-                <div className="text-xs text-slate-400 mt-0.5">{copy.correct[language]}</div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:border-white/5 dark:bg-slate-800/40">
+                <div className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{questions.length - mistakes}</div>
+                <div className="text-xs text-slate-500 mt-0.5 dark:text-slate-400">{copy.correct[language]}</div>
               </div>
-              <div className="rounded-2xl border border-white/5 bg-slate-800/40 p-4">
-                <div className={`text-2xl font-black ${isPassed ? 'text-amber-400' : 'text-rose-400'}`}>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:border-white/5 dark:bg-slate-800/40">
+                <div className={`text-2xl font-black ${isPassed ? 'text-amber-500 dark:text-amber-400' : 'text-rose-600 dark:text-rose-400'}`}>
                   {mistakes}
                 </div>
-                <div className="text-xs text-slate-400 mt-0.5">{copy.errors[language]} (Max 3)</div>
+                <div className="text-xs text-slate-500 mt-0.5 dark:text-slate-400">{copy.errors[language]} (Max 3)</div>
               </div>
-              <div className="rounded-2xl border border-white/5 bg-slate-800/40 p-4">
-                <div className="text-2xl font-black text-slate-200">{timeUsedFormatted()}</div>
-                <div className="text-xs text-slate-400 mt-0.5">{copy.timeSpent[language]}</div>
+              <div className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 dark:border-white/5 dark:bg-slate-800/40">
+                <div className="text-2xl font-black text-slate-800 dark:text-slate-200">{timeUsedFormatted()}</div>
+                <div className="text-xs text-slate-500 mt-0.5 dark:text-slate-400">{copy.timeSpent[language]}</div>
               </div>
             </div>
 
             <div className="flex flex-wrap gap-3 justify-center pt-2">
               <button
                 onClick={handleRetake}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 py-3 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300"
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 py-3 text-sm font-bold text-slate-950 shadow-md shadow-amber-400/20 transition-all hover:bg-amber-300 cursor-pointer"
               >
                 <RotateCcw className="h-4 w-4" /> {copy.retake[language]}
               </button>
 
               <button
                 onClick={() => setShowReview(!showReview)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-200 transition-all hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all hover:bg-slate-100 hover:text-slate-950 dark:border-white/10 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-white/10 cursor-pointer"
               >
                 <Eye className="h-4 w-4" /> {copy.reviewAnswers[language]}
               </button>
@@ -564,7 +559,7 @@ export default function ExamEngine() {
               {mistakes > 0 && (
                 <Link
                   href="/mistakes"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-rose-500/20 bg-rose-500/10 px-6 py-3 text-sm font-semibold text-rose-300 transition-all hover:bg-rose-500/20"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-6 py-3 text-sm font-semibold text-rose-600 transition-all hover:bg-rose-500/20 dark:border-rose-500/20 dark:text-rose-300"
                 >
                   <Flame className="h-4 w-4" /> {copy.viewMistakes[language]}
                 </Link>
@@ -572,7 +567,7 @@ export default function ExamEngine() {
 
               <Link
                 href="/"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-200 transition-all hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-800 shadow-sm transition-all hover:bg-slate-100 hover:text-slate-950 dark:border-white/10 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-white/10"
               >
                 <Home className="h-4 w-4" /> {copy.backHome[language]}
               </Link>
@@ -580,9 +575,9 @@ export default function ExamEngine() {
           </div>
 
           {/* Module Diagnostic Breakdown */}
-          <div className="rounded-3xl border border-white/10 bg-slate-900/60 p-6 backdrop-blur-xl">
-            <div className="flex items-center gap-2 text-sm font-bold text-white mb-4">
-              <BarChart3 className="h-4 w-4 text-amber-400" />
+          <div className="rounded-3xl border border-slate-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-slate-900/60">
+            <div className="flex items-center gap-2 text-sm font-bold text-slate-900 mb-4 dark:text-white">
+              <BarChart3 className="h-4 w-4 text-amber-500 dark:text-amber-400" />
               <span>{copy.topicBreakdown[language]}</span>
             </div>
 
@@ -595,21 +590,21 @@ export default function ExamEngine() {
                 return (
                   <div
                     key={topicId}
-                    className="flex items-center justify-between rounded-xl border border-white/5 bg-slate-800/40 p-3.5"
+                    className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-slate-50/70 p-3.5 dark:border-white/5 dark:bg-slate-800/40"
                   >
-                    <span className="text-xs font-semibold text-slate-300 truncate max-w-[200px]">
+                    <span className="text-xs font-semibold text-slate-700 truncate max-w-[200px] dark:text-slate-300">
                       {title}
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-slate-500 dark:text-slate-400">
                         {stats.total - stats.errors}/{stats.total}
                       </span>
                       {hasErrors ? (
-                        <span className="rounded-md bg-rose-500/10 border border-rose-500/20 px-2 py-0.5 text-[11px] font-bold text-rose-400">
+                        <span className="rounded-md bg-rose-500/10 border border-rose-500/30 px-2 py-0.5 text-[11px] font-bold text-rose-600 dark:border-rose-500/20 dark:text-rose-400">
                           {copy.moduleFailures(stats.errors)[language]}
                         </span>
                       ) : (
-                        <span className="rounded-md bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 text-[11px] font-bold text-emerald-400">
+                        <span className="rounded-md bg-emerald-500/10 border border-emerald-500/30 px-2 py-0.5 text-[11px] font-bold text-emerald-600 dark:border-emerald-500/20 dark:text-emerald-400">
                           100%
                         </span>
                       )}
@@ -623,8 +618,8 @@ export default function ExamEngine() {
           {/* Review Answers Drawer */}
           {showReview && (
             <div className="space-y-4 pt-4">
-              <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-amber-400" />
+              <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2 dark:text-white">
+                <AlertCircle className="h-5 w-5 text-amber-500 dark:text-amber-400" />
                 <span>{copy.detailedReview[language]}</span>
               </h3>
 
@@ -637,26 +632,26 @@ export default function ExamEngine() {
                 return (
                   <div
                     key={q.id}
-                    className={`rounded-2xl border p-5 backdrop-blur-md ${
+                    className={`rounded-2xl border p-5 backdrop-blur-md transition-colors ${
                       isCorrect 
-                        ? 'border-emerald-500/20 bg-emerald-500/5' 
-                        : 'border-rose-500/20 bg-rose-500/5'
+                        ? 'border-emerald-500/30 bg-emerald-500/5' 
+                        : 'border-rose-500/30 bg-rose-500/5'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-slate-400">
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
                         {copy.questionLabel[language]} {idx + 1}
                       </span>
                       <span className={`text-xs font-bold px-2.5 py-0.5 rounded-full border ${
                         isCorrect
-                          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                          : 'border-rose-500/30 bg-rose-500/10 text-rose-400'
+                          ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                          : 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400'
                       }`}>
                         {isCorrect ? copy.correctBadge[language] : copy.failedBadge[language]}
                       </span>
                     </div>
 
-                    <h4 className="text-sm sm:text-base font-semibold text-white mb-3">
+                    <h4 className="text-sm sm:text-base font-semibold text-slate-900 mb-3 dark:text-white">
                       {qText}
                     </h4>
 
@@ -670,24 +665,24 @@ export default function ExamEngine() {
                             key={oIdx}
                             className={`rounded-xl p-2.5 text-xs font-medium border flex items-center justify-between ${
                               isActualCorrect
-                                ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-300 font-semibold'
+                                ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-700 font-semibold dark:text-emerald-300'
                                 : isUserChoice
-                                ? 'border-rose-500/40 bg-rose-500/10 text-rose-300 line-through'
-                                : 'border-white/5 bg-slate-800/30 text-slate-400'
+                                ? 'border-rose-500/40 bg-rose-500/10 text-rose-700 line-through dark:text-rose-300'
+                                : 'border-slate-200 bg-white/60 text-slate-600 dark:border-white/5 dark:bg-slate-800/30 dark:text-slate-400'
                             }`}
                           >
                             <span>
                               {String.fromCharCode(65 + oIdx)}. {opt}
                             </span>
-                            {isActualCorrect && <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />}
-                            {isUserChoice && !isActualCorrect && <XCircle className="h-4 w-4 shrink-0 text-rose-400" />}
+                            {isActualCorrect && <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500 dark:text-emerald-400" />}
+                            {isUserChoice && !isActualCorrect && <XCircle className="h-4 w-4 shrink-0 text-rose-500 dark:text-rose-400" />}
                           </div>
                         );
                       })}
                     </div>
 
-                    <p className="text-xs text-slate-400 border-t border-white/5 pt-2">
-                      <strong className="text-slate-300">{copy.explanationLabel[language]}: </strong>
+                    <p className="text-xs text-slate-500 border-t border-slate-200/60 pt-2 dark:border-white/5 dark:text-slate-400">
+                      <strong className="text-slate-700 dark:text-slate-300">{copy.explanationLabel[language]}: </strong>
                       {q.explanation[language] || q.explanation.es}
                     </p>
                   </div>

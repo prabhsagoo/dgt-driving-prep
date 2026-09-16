@@ -227,22 +227,22 @@ export default function HomePage() {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-16">
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-16 transition-colors duration-200">
       {/* Hero Section */}
       <section className="flex flex-col items-center text-center">
-        <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400 backdrop-blur-md">
+        <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-600 backdrop-blur-md dark:border-amber-500/20 dark:text-amber-400">
           <Sparkles className="h-3.5 w-3.5" />
           <span>{copy.badge[language]}</span>
         </div>
 
-        <h1 className="mt-6 max-w-3xl text-4xl font-extrabold tracking-tight text-white sm:text-6xl">
+        <h1 className="mt-6 max-w-3xl text-4xl font-extrabold tracking-tight text-slate-900 sm:text-6xl dark:text-white">
           {copy.heroTitle1[language]}{' '}
-          <span className="bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 bg-clip-text text-transparent">
             {copy.heroTitle2[language]}
           </span>
         </h1>
 
-        <p className="mt-4 max-w-xl text-base text-slate-400 sm:text-lg">
+        <p className="mt-4 max-w-xl text-base text-slate-600 sm:text-lg dark:text-slate-400">
           {copy.heroDesc[language]}
         </p>
 
@@ -259,7 +259,7 @@ export default function HomePage() {
 
           <Link
             href="/learn"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 bg-slate-900/60 px-6 py-3.5 text-sm font-semibold text-slate-200 backdrop-blur-md transition-all hover:bg-white/10 hover:text-white"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white/80 px-6 py-3.5 text-sm font-semibold text-slate-800 shadow-sm backdrop-blur-md transition-all hover:bg-slate-100 hover:text-slate-950 dark:border-white/10 dark:bg-slate-900/60 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white"
           >
             <BookOpen className="h-4 w-4" />
             <span>{copy.exploreTopics[language]}</span>
@@ -268,42 +268,42 @@ export default function HomePage() {
 
         {/* Exam Criteria Badges */}
         <div className="mt-12 grid grid-cols-3 gap-3 sm:gap-6 max-w-2xl w-full">
-          <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-4 backdrop-blur-sm">
-            <div className="flex items-center justify-center text-amber-400 mb-1">
+          <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-slate-900/40">
+            <div className="flex items-center justify-center text-amber-500 mb-1 dark:text-amber-400">
               <Zap className="h-5 w-5" />
             </div>
-            <div className="text-xl font-bold text-white">30</div>
-            <div className="text-[11px] text-slate-400 font-medium">Preguntas / Questions</div>
+            <div className="text-xl font-bold text-slate-900 dark:text-white">30</div>
+            <div className="text-[11px] text-slate-500 font-medium dark:text-slate-400">Preguntas / Questions</div>
           </div>
-          <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-4 backdrop-blur-sm">
-            <div className="flex items-center justify-center text-blue-400 mb-1">
+          <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-slate-900/40">
+            <div className="flex items-center justify-center text-blue-500 mb-1 dark:text-blue-400">
               <Clock className="h-5 w-5" />
             </div>
-            <div className="text-xl font-bold text-white">30 min</div>
-            <div className="text-[11px] text-slate-400 font-medium">Límite / Limit</div>
+            <div className="text-xl font-bold text-slate-900 dark:text-white">30 min</div>
+            <div className="text-[11px] text-slate-500 font-medium dark:text-slate-400">Límite / Limit</div>
           </div>
-          <div className="rounded-2xl border border-white/5 bg-slate-900/40 p-4 backdrop-blur-sm">
-            <div className="flex items-center justify-center text-emerald-400 mb-1">
+          <div className="rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-slate-900/40">
+            <div className="flex items-center justify-center text-emerald-500 mb-1 dark:text-emerald-400">
               <AlertTriangle className="h-5 w-5" />
             </div>
-            <div className="text-xl font-bold text-white">≤ 3</div>
-            <div className="text-[11px] text-slate-400 font-medium">Fallos máx / Max errors</div>
+            <div className="text-xl font-bold text-slate-900 dark:text-white">≤ 3</div>
+            <div className="text-[11px] text-slate-500 font-medium dark:text-slate-400">Fallos máx / Max errors</div>
           </div>
         </div>
       </section>
 
       {/* Readiness & Exam History Dashboard */}
       {readinessMetrics.totalTests > 0 && (
-        <section className="mt-16 rounded-3xl border border-white/10 bg-slate-900/60 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/5 pb-6">
+        <section className="mt-16 rounded-3xl border border-slate-200/90 bg-white/80 p-6 sm:p-8 shadow-xl backdrop-blur-xl transition-colors dark:border-white/10 dark:bg-slate-900/60 dark:shadow-2xl">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-200/80 pb-6 dark:border-white/5">
             <div>
               <div className="flex items-center gap-2">
-                <TrendingUp className="h-5 w-5 text-amber-400" />
-                <h2 className="text-xl font-extrabold text-white sm:text-2xl">
+                <TrendingUp className="h-5 w-5 text-amber-500 dark:text-amber-400" />
+                <h2 className="text-xl font-extrabold text-slate-900 sm:text-2xl dark:text-white">
                   {copy.readinessTitle[language]}
                 </h2>
               </div>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                 {copy.readinessDesc[language]}
               </p>
             </div>
@@ -311,10 +311,10 @@ export default function HomePage() {
             <div className="flex items-center gap-3">
               <span className={`rounded-xl px-3 py-1.5 text-xs font-bold border ${
                 readinessMetrics.readinessStatus === 'ready'
-                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                  ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-300'
                   : readinessMetrics.readinessStatus === 'progress'
-                  ? 'border-amber-500/30 bg-amber-500/10 text-amber-300'
-                  : 'border-rose-500/30 bg-rose-500/10 text-rose-300'
+                  ? 'border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-300'
+                  : 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-300'
               }`}>
                 {readinessMetrics.readinessStatus === 'ready'
                   ? copy.readyBadge[language]
@@ -323,34 +323,34 @@ export default function HomePage() {
                   : copy.studyBadge[language]}
               </span>
               <div className="flex items-baseline gap-1 font-mono">
-                <span className="text-3xl font-black text-white">{readinessMetrics.scorePercent}%</span>
+                <span className="text-3xl font-black text-slate-900 dark:text-white">{readinessMetrics.scorePercent}%</span>
               </div>
             </div>
           </div>
 
           {/* Quick Metrics Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
-            <div className="rounded-2xl border border-white/5 bg-slate-800/40 p-4">
-              <div className="text-xs text-slate-400 font-medium">{copy.testsCompleted[language]}</div>
-              <div className="text-2xl font-black text-white mt-1">{readinessMetrics.totalTests}</div>
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 dark:border-white/5 dark:bg-slate-800/40">
+              <div className="text-xs text-slate-500 font-medium dark:text-slate-400">{copy.testsCompleted[language]}</div>
+              <div className="text-2xl font-black text-slate-900 mt-1 dark:text-white">{readinessMetrics.totalTests}</div>
             </div>
-            <div className="rounded-2xl border border-white/5 bg-slate-800/40 p-4">
-              <div className="text-xs text-slate-400 font-medium">{copy.passRateLabel[language]}</div>
-              <div className="text-2xl font-black text-emerald-400 mt-1">{readinessMetrics.passRate}%</div>
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 dark:border-white/5 dark:bg-slate-800/40">
+              <div className="text-xs text-slate-500 font-medium dark:text-slate-400">{copy.passRateLabel[language]}</div>
+              <div className="text-2xl font-black text-emerald-600 mt-1 dark:text-emerald-400">{readinessMetrics.passRate}%</div>
             </div>
-            <div className="rounded-2xl border border-white/5 bg-slate-800/40 p-4">
-              <div className="text-xs text-slate-400 font-medium">{copy.avgErrorsLabel[language]}</div>
-              <div className="text-2xl font-black text-amber-400 mt-1">{readinessMetrics.avgMistakes}</div>
+            <div className="rounded-2xl border border-slate-200/80 bg-slate-50/80 p-4 dark:border-white/5 dark:bg-slate-800/40">
+              <div className="text-xs text-slate-500 font-medium dark:text-slate-400">{copy.avgErrorsLabel[language]}</div>
+              <div className="text-2xl font-black text-amber-600 mt-1 dark:text-amber-400">{readinessMetrics.avgMistakes}</div>
             </div>
             <Link
               href="/mistakes"
               className="rounded-2xl border border-rose-500/20 bg-rose-500/5 p-4 transition-all hover:bg-rose-500/10 group"
             >
-              <div className="text-xs text-rose-300/80 font-medium flex items-center justify-between">
+              <div className="text-xs text-rose-600 font-medium flex items-center justify-between dark:text-rose-300/80">
                 <span>{copy.pendingMistakes[language]}</span>
-                <Flame className="h-3.5 w-3.5 text-rose-400" />
+                <Flame className="h-3.5 w-3.5 text-rose-500 dark:text-rose-400" />
               </div>
-              <div className="text-2xl font-black text-rose-400 mt-1 group-hover:scale-105 transition-transform">
+              <div className="text-2xl font-black text-rose-600 mt-1 group-hover:scale-105 transition-transform dark:text-rose-400">
                 {mistakesCount}
               </div>
             </Link>
@@ -358,9 +358,9 @@ export default function HomePage() {
 
           {/* Recent Attempts List */}
           {examHistory.length > 0 && (
-            <div className="mt-6 border-t border-white/5 pt-5">
-              <div className="flex items-center gap-2 mb-3 text-xs font-bold text-slate-300">
-                <History className="h-4 w-4 text-amber-400" />
+            <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-white/5">
+              <div className="flex items-center gap-2 mb-3 text-xs font-bold text-slate-700 dark:text-slate-300">
+                <History className="h-4 w-4 text-amber-500 dark:text-amber-400" />
                 <span>{copy.recentHistory[language]}</span>
               </div>
 
@@ -368,27 +368,27 @@ export default function HomePage() {
                 {examHistory.slice(-4).reverse().map((attempt) => (
                   <div
                     key={attempt.id}
-                    className="flex items-center justify-between rounded-xl border border-white/5 bg-slate-800/30 px-4 py-3 text-xs"
+                    className="flex items-center justify-between rounded-xl border border-slate-200/80 bg-slate-50/60 px-4 py-3 text-xs dark:border-white/5 dark:bg-slate-800/30"
                   >
                     <div className="flex items-center gap-3">
                       {attempt.passed ? (
-                        <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0 dark:text-emerald-400" />
                       ) : (
-                        <XCircle className="h-4 w-4 text-rose-400 shrink-0" />
+                        <XCircle className="h-4 w-4 text-rose-500 shrink-0 dark:text-rose-400" />
                       )}
                       <div>
-                        <span className="font-semibold text-white">
+                        <span className="font-semibold text-slate-900 dark:text-white">
                           {attempt.passed ? copy.passed[language] : copy.failed[language]}
                         </span>
-                        <span className="text-slate-400 text-[11px] ml-2 font-mono">
+                        <span className="text-slate-500 text-[11px] ml-2 font-mono dark:text-slate-400">
                           {attempt.score}/{attempt.total} ({copy.mistakesPlural(attempt.mistakes)[language]})
                         </span>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-3 text-slate-400 font-mono text-[11px]">
+                    <div className="flex items-center gap-3 text-slate-500 font-mono text-[11px] dark:text-slate-400">
                       <span>{Math.floor(attempt.timeSpentSeconds / 60)}m {attempt.timeSpentSeconds % 60}s</span>
-                      <span className="text-slate-500">|</span>
+                      <span className="text-slate-300 dark:text-slate-600">|</span>
                       <span>{attempt.date}</span>
                     </div>
                   </div>
@@ -402,10 +402,10 @@ export default function HomePage() {
       {/* Topics Grid */}
       <section className="mt-20">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-bold text-white sm:text-2xl">
+          <h2 className="text-xl font-bold text-slate-900 sm:text-2xl dark:text-white">
             {copy.topicsTitle[language]}
           </h2>
-          <Link href="/learn" className="text-xs font-semibold text-amber-400 hover:underline flex items-center gap-1">
+          <Link href="/learn" className="text-xs font-semibold text-amber-600 hover:underline flex items-center gap-1 dark:text-amber-400">
             <span>{copy.viewAll[language]}</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
@@ -420,25 +420,25 @@ export default function HomePage() {
               <Link
                 key={topic.id}
                 href={`/learn/${topic.id}`}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/40 p-5 backdrop-blur-md transition-all hover:border-amber-400/40 hover:bg-slate-900/80 hover:shadow-xl hover:shadow-amber-500/5"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white/70 p-5 shadow-sm backdrop-blur-md transition-all hover:border-amber-400/60 hover:bg-white hover:shadow-md dark:border-white/10 dark:bg-slate-900/40 dark:hover:border-amber-400/40 dark:hover:bg-slate-900/80 dark:hover:shadow-xl dark:hover:shadow-amber-500/5"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="text-base font-bold text-white group-hover:text-amber-400 transition-colors">
+                    <h3 className="text-base font-bold text-slate-900 group-hover:text-amber-600 transition-colors dark:text-white dark:group-hover:text-amber-400">
                       {topic.title[language]}
                     </h3>
-                    <p className="mt-1 text-xs text-slate-400 line-clamp-2">
+                    <p className="mt-1 text-xs text-slate-500 line-clamp-2 dark:text-slate-400">
                       {topic.description[language]}
                     </p>
                   </div>
-                  <div className="rounded-xl border border-white/10 bg-slate-800/80 p-2.5 text-slate-300 group-hover:text-amber-400 transition-colors shrink-0 ml-3">
+                  <div className="rounded-xl border border-slate-200 bg-slate-100 p-2.5 text-slate-600 group-hover:text-amber-600 transition-colors shrink-0 ml-3 dark:border-white/10 dark:bg-slate-800/80 dark:text-slate-300 dark:group-hover:text-amber-400">
                     <IconComponent className="h-5 w-5" />
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-3 text-xs text-slate-500">
+                <div className="mt-4 flex items-center justify-between border-t border-slate-200/60 pt-3 text-xs text-slate-400 dark:border-white/5 dark:text-slate-500">
                   <span>{copy.questionsAvailable(actualCount)[language]}</span>
-                  <span className="font-semibold text-slate-400 group-hover:text-amber-400 flex items-center gap-1 transition-colors">
+                  <span className="font-semibold text-slate-600 group-hover:text-amber-600 flex items-center gap-1 transition-colors dark:text-slate-400 dark:group-hover:text-amber-400">
                     {copy.practice[language]} <ArrowRight className="h-3 w-3" />
                   </span>
                 </div>
