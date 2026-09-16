@@ -6,4 +6,28 @@ html,
 body {
   margin: 0;
   padding: 0;
+  /* Eliminate the ~300ms mobile tap delay across iOS WebKit */
+  touch-action: manipulation;
+  /* Remove the gray box highlight on mobile taps */
+  -webkit-tap-highlight-color: transparent;
+  /* Smooth scrolling across iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ensure interactive controls respond to taps instantly */
+button,
+a,
+input,
+select {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Optimize rendering for glassmorphic elements */
+.backdrop-blur-md,
+.backdrop-blur-xl,
+.backdrop-blur-2xl {
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  will-change: transform;
 }

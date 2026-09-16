@@ -49,7 +49,7 @@ export default function MobileNav() {
   ];
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 block border-t border-slate-200/80 bg-white/85 backdrop-blur-xl transition-colors duration-200 md:hidden dark:border-white/10 dark:bg-slate-950/85">
+    <div className="fixed bottom-0 left-0 right-0 z-40 block border-t border-slate-200/80 bg-white/90 backdrop-blur-md transition-colors duration-200 md:hidden dark:border-white/10 dark:bg-slate-950/90">
       <nav className="flex h-16 items-center justify-around px-2 safe-area-pb">
         {navItems.map((item) => {
           const Icon = item.icon;
@@ -62,7 +62,8 @@ export default function MobileNav() {
             <Link
               key={item.key}
               href={item.href}
-              className={`flex flex-col items-center justify-center gap-1 px-3 py-1 transition-colors cursor-pointer ${
+              prefetch={true}
+              className={`flex flex-col items-center justify-center gap-1 px-3 py-1 transition-all duration-75 cursor-pointer touch-manipulation select-none active:scale-90 active:opacity-75 ${
                 isActive
                   ? 'text-amber-500 font-bold dark:text-amber-400'
                   : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
